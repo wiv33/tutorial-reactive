@@ -40,6 +40,11 @@
             <artifactId>javafx-graphics</artifactId>
             <version>13-ea+14b</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>13-ea+14b</version>
+        </dependency>
     </dependencies>
 
     <build>
