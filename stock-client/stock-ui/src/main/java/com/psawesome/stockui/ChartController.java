@@ -1,7 +1,7 @@
 package com.psawesome.stockui;
 
+import com.psawesome.stockclient.StockClient;
 import com.psawesome.stockclient.StockPrice;
-import com.psawesome.stockclient.WebClientStockClient;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,9 +23,9 @@ import java.util.function.Consumer;
 public class ChartController {
     @FXML
     public LineChart<String, Double> chart;
-    private WebClientStockClient webClientStockClient;
+    private StockClient webClientStockClient;
 
-    public ChartController(WebClientStockClient webClientStockClient) {
+    public ChartController(StockClient webClientStockClient) {
         this.webClientStockClient = webClientStockClient;
     }
 

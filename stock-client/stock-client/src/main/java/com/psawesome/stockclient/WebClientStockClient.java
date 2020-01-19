@@ -14,9 +14,10 @@ import java.io.IOException;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class WebClientStockClient {
+public class WebClientStockClient implements StockClient {
     private final WebClient webClient;
 
+    @Override
     public Flux<StockPrice> pricesFor(String symbol) {
         return webClient.get().uri("http://localhost:8080/stocks/{symbol}", symbol)
                 .retrieve()

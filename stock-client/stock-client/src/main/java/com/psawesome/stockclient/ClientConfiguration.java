@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ClientConfiguration {
 
     @Bean
-    public WebClientStockClient webClientStockClient(WebClient webClient) {
+    public StockClient webClientStockClient(WebClient webClient) {
         return new WebClientStockClient(webClient);
     }
 
