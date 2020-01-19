@@ -18,11 +18,10 @@ import java.util.function.Consumer;
  * DATE: 2020-01-19 일요일 18:35
  */
 @Component
-public class ChartController implements Consumer<StockPrice> {
+public class ChartController {
     @FXML
     public LineChart<String, Double> chart;
     private WebClientStockClient webClientStockClient;
-    private ObservableList<XYChart.Data<String, Double>> seriesData = FXCollections.observableArrayList();
 
     public ChartController(WebClientStockClient webClientStockClient) {
         this.webClientStockClient = webClientStockClient;
@@ -30,17 +29,44 @@ public class ChartController implements Consumer<StockPrice> {
 
     @FXML
     public void initialize() {
+        String symbol = "SYMBOL";
+        final PriceSubscriber priceSubscriber1 = new PriceSubscriber(symbol);
+        String symbol2 = "SYMBOL_2";
+        final PriceSubscriber priceSubscriber2 = new PriceSubscriber(symbol2);
+        String symbol3 = "SYMBOL_3";
+        final PriceSubscriber priceSubscriber3 = new PriceSubscriber(symbol3);
+
         ObservableList<XYChart.Series<String, Double>> data = FXCollections.observableArrayList();
-        data.add(new XYChart.Series<>(seriesData));
+        data.add(priceSubscriber1.getSeries());
+        data.add(priceSubscriber2.getSeries());
+        data.add(priceSubscriber3.getSeries());
         chart.setData(data);
 
-        webClientStockClient.pricesFor("SYMBOL").subscribe(this);
+        webClientStockClient.pricesFor(symbol).subscribe(priceSubscriber1);
+        webClientStockClient.pricesFor(symbol2).subscribe(priceSubscriber2);
+        webClientStockClient.pricesFor(symbol3).subscribe(priceSubscriber3);
     }
 
-    @Override
-    public void accept(StockPrice stockPrice) {
-        Platform.runLater(() ->
-                seriesData.add(new XYChart.Data<>(String.valueOf(stockPrice.getTime().getSecond()), stockPrice.getPrice())
-        ));
+    private class PriceSubscriber implements Consumer<StockPrice> {
+        private ObservableList<XYChart.Data<String, Double>> seriesData = FXCollections.observableArrayList();
+        private final String symbol;
+        private final XYChart.Series<String, Double> series;
+
+        public PriceSubscriber(String symbol) {
+            this.symbol = symbol;
+            series = new XYChart.Series<>(seriesData);
+        }
+
+
+        @Override
+        public void accept(StockPrice stockPrice) {
+            Platform.runLater(() ->
+                    seriesData.add(new XYChart.Data<>(String.valueOf(stockPrice.getTime().getSecond()), stockPrice.getPrice())
+                    ));
+        }
+
+        public XYChart.Series<String, Double> getSeries() {
+            return series;
+        }
     }
 }
